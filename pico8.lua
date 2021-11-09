@@ -76,7 +76,9 @@ local function parseFile(filename)
       i = i + 1
     end
   end
-  return sprites
+  return {
+    sprites=sprites,
+  }
 end
 
 return {

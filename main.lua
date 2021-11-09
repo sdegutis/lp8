@@ -1,10 +1,11 @@
-local lib = require("lib")
+local pico8 = require("pico8")
 local sprs
 
 function love.load()
   love.graphics.setDefaultFilter("nearest", "nearest")
   love.window.setMode(800, 600)
-  sprs = lib.parseFile("test1.p8")
+  local p8data = pico8.parseFile("test1.p8")
+  sprs = p8data.sprites
 end
 
 function love.draw()
