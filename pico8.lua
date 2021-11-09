@@ -49,24 +49,27 @@ local function getSpriteAt(spritesheet, sx, sy)
   return love.graphics.newImage(data)
 end
 
-local function linesBetween(lineIter, before, after)
-  local lines = {}
-  for line in lineIter do
-    if line == before then break end
+---@param filename string
+local function parseGroups(filename)
+  local groups = {}
+  local groupname = '__intro__'
+  for line in love.filesystem.lines(filename) do
+    if line:sub(1,2) == '__' then
+      groupname = line
+    else
+      groups[groupname] = groups[groupname] or {}
+      table.insert(groups[groupname], line)
+    end
   end
-  for line in lineIter do
-    if line == after then break end
-    table.insert(lines, line)
-  end
-  return lines
+  return groups
 end
 
 ---returns a sprite mapping per p8 file
 ---@param filename string
 ---@return love.Image[]
 local function parseFile(filename)
-  local lineIter = love.filesystem.lines(filename)
-  local spritesheet = linesBetween(lineIter, "__gfx__", "")
+  local groups = parseGroups(filename)
+  local spritesheet = groups.__gfx__
   local sprites = {}
   local i = 0
   for sy = 0, 15 do
