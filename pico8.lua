@@ -28,15 +28,17 @@ local colorTable = {
 ---@param spritesheet string[]
 ---@param sx number
 ---@param sy number
+---@param w number
+---@param h number
 ---@return love.Image
-local function getSpriteAt(spritesheet, sx, sy)
-  local data = love.image.newImageData(8,8)
+local function getSpriteAt(spritesheet, sx, sy, w, h)
+  local data = love.image.newImageData(w,h)
 
-  for py = 0, 7 do
+  for py = 0, (h-1) do
     local row = sy * 8 + py + 1
     local line = spritesheet[row] or string.rep('0', 128)
 
-    for px = 0, 7 do
+    for px = 0, (w-1) do
       local idx = sx * 8 + px + 1
       local hex = line:sub(idx,idx)
       local n = tonumber(hex, 16)
@@ -66,21 +68,17 @@ end
 
 ---returns a sprite mapping per p8 file
 ---@param filename string
----@return love.Image[]
 local function parseFile(filename)
   local groups = parseGroups(filename)
   local spritesheet = groups.__gfx__
-  local sprites = {}
-  local i = 0
-  for sy = 0, 15 do
-    for sx = 0, 15 do
-      local sprite = getSpriteAt(spritesheet, sx, sy)
-      table.insert(sprites, i, sprite)
-      i = i + 1
-    end
-  end
   return {
-    sprites=sprites,
+    ---@param i number
+    ---@return love.Image
+    makeSpriteAt = function(i, w, h)
+      local sx = i % 16
+      local sy = math.floor(i / 16)
+      return getSpriteAt(spritesheet, sx, sy, w or 8, h or 8)
+    end
   }
 end
 
