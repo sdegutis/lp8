@@ -91,7 +91,7 @@ local function getMap(map1, map2)
       local hex = map:sub(i,i+1)
       local n = tonumber(hex, 16)
       table.insert(row, n)
-      i = i + 1
+      i = i + 2
     end
     table.insert(output, row)
   end
