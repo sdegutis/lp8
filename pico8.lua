@@ -89,8 +89,13 @@ local function getMap(map1, map2)
     local row = {}
     for x = 1, 128 do
       local hex = map:sub(i,i+1)
+
+      -- reverse gfx-based map pairs
+      if y > 32 then hex = hex:reverse() end
+
       local n = tonumber(hex, 16)
       table.insert(row, n)
+
       i = i + 2
     end
     table.insert(output, row)
