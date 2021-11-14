@@ -101,7 +101,7 @@ end
 ---Each cell is 2 chars (hex).
 ---@param map1 string[] 0-32 rows of 256 chars
 ---@param map2 string[] 0-64 rows of 128 chars
-local function getMap(map1, map2)
+local function parseMap(map1, map2)
   -- make them both 0-8192 chars
   map1 = table.concat(map1)
   map2 = table.concat(map2)
@@ -160,7 +160,7 @@ local function parseFile(filename, fullMap)
   local map2 = fullMap
     and {unpack(groups.__gfx__, 65)}
     or {}
-  local map = getMap(map1, map2)
+  local map = parseMap(map1, map2)
 
   local flags = parseFlags(groups.__gff__ or {})
 
