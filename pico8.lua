@@ -66,19 +66,40 @@ local function parseGroups(filename)
   return groups
 end
 
+---Returns a 2d array of sprite indexes.
+---Each cell is 2 chars (hex).
+---@param map1 string[] 32 rows of 256 chars
+---@param map2 string[] nil, or 64 rows of 128 chars
+local function getMap(map1, map2)
+  
+end
+
 ---returns a sprite mapping per p8 file
 ---@param filename string
 local function parseFile(filename)
   local groups = parseGroups(filename)
-  local spritesheet = groups.__gfx__
   return {
+
+    ---Returns a new love.Image for this sprite
     ---@param i number
+    ---@param w number pixels wide (default 8)
+    ---@param h number pixels tall (default 8)
     ---@return love.Image
     makeSpriteAt = function(i, w, h)
       local sx = i % 16
       local sy = math.floor(i / 16)
-      return getSpriteAt(spritesheet, sx, sy, w or 8, h or 8)
+      return getSpriteAt(groups.__gfx__, sx, sy, w or 8, h or 8)
+    end,
+
+    ---Returns a 2d array of map sprite indexes
+    ---@param full boolean whether to use the bottom half also
+    makeMap = function(full)
+      local map2 = full
+        and {unpack(groups.__gfx__, 65)}
+        or nil
+      return getMap(groups.__map__, map2)
     end
+
   }
 end
 

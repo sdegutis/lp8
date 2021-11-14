@@ -6,8 +6,10 @@ love.window.setMode(800, 600)
 local pico8 = require("pico8")
 local basics = pico8.parseFile("test2.p8")
 
+local map = basics.makeMap(true)
+
 function love.load()
-  
+
 end
 
 function love.draw()
