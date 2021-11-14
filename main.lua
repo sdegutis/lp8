@@ -15,6 +15,15 @@ function love.load()
 
 end
 
+local cachedSprites = {}
+local function getCachedSprite(i, w, h)
+  if not cachedSprites[i] then
+    cachedSprites[i] = basics.makeSpriteAt(i, w, h)
+  end
+  return cachedSprites[i]
+end
+
+
 function love.draw()
   love.graphics.clear()
 
@@ -28,18 +37,18 @@ function love.draw()
   for y = 1, 64 do
     for x = 1, 128 do
       local spri = basics.map[y][x]
-      local spr = basics.spriteAt(spri)
+      local spr = getCachedSprite(spri)
       spr:draw(mapx + (x-1)*8, mapy + (y-1)*8)
     end
   end
 
-  basics.spriteAt(0):draw(  10*3, 10, 3)
-  basics.spriteAt(1):draw(  20*3, 10, 3)
-  basics.spriteAt(2):draw(  30*3, 10, 3)
-  basics.spriteAt(3):draw(  40*3, 10, 3)
-  basics.spriteAt(17):draw( 50*3, 10, 3)
-  basics.spriteAt(18):draw( 60*3, 10, 3)
-  basics.spriteAt(19):draw( 70*3, 10, 3)
-  basics.spriteAt(37):draw( 80*3, 10, 3)
-  basics.spriteAt(4, 16, 16):draw( 90*3, 10, 3)
+  getCachedSprite(0):draw(  10*3, 10, 3)
+  getCachedSprite(1):draw(  20*3, 10, 3)
+  getCachedSprite(2):draw(  30*3, 10, 3)
+  getCachedSprite(3):draw(  40*3, 10, 3)
+  getCachedSprite(17):draw( 50*3, 10, 3)
+  getCachedSprite(18):draw( 60*3, 10, 3)
+  getCachedSprite(19):draw( 70*3, 10, 3)
+  getCachedSprite(37):draw( 80*3, 10, 3)
+  getCachedSprite(4, 16, 16):draw( 90*3, 10, 3)
 end

@@ -62,7 +62,7 @@ end
 ---@param w number
 ---@param h number
 ---@return Sprite
-local function getSpriteAt(spritesheet, flag, sx, sy, w, h)
+local function createSpriteAt(spritesheet, flag, sx, sy, w, h)
   local data = love.image.newImageData(w,h)
 
   for py = 0, (h-1) do
@@ -150,17 +150,6 @@ local function parseFlags(gff)
   return flags
 end
 
-local cachedSprites = {}
-local function getCachedSprite(gfx, flags, i, w, h)
-  if not cachedSprites[i] then
-    local sx = i % 16
-    local sy = math.floor(i / 16)
-    local spr = getSpriteAt(gfx, flags[i+1], sx, sy, w or 8, h or 8)
-    cachedSprites[i] = spr
-  end
-  return cachedSprites[i]
-end
-
 ---returns a sprite mapping per p8 file
 ---@param filename string relative path
 ---@param fullMap boolean whether to use the bottom half also
@@ -182,8 +171,10 @@ local function parseFile(filename, fullMap)
     ---@param w number pixels wide (default 8)
     ---@param h number pixels tall (default 8)
     ---@return Sprite
-    spriteAt = function(i, w, h)
-      return getCachedSprite(groups.__gfx__, flags, i, w, h)
+    makeSpriteAt = function(i, w, h)
+      local sx = i % 16
+      local sy = math.floor(i / 16)
+      return createSpriteAt(groups.__gfx__, flags[i+1], sx, sy, w or 8, h or 8)
     end,
 
     ---2d array of map sprite indexes: map[y][x]
