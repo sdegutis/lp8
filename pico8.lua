@@ -25,6 +25,15 @@ local colorTable = {
   makecolor(0xFF,0xCC,0xAA),
 }
 
+local Sprite = {}
+setmetatable(Sprite, {__index = Sprite})
+
+---@param x number
+---@param y number
+function Sprite:draw(x, y)
+  love.graphics.draw(self.image, x, y)
+end
+
 ---@param spritesheet string[]
 ---@param sx number
 ---@param sy number
@@ -104,6 +113,17 @@ local function getMap(map1, map2)
   return output
 end
 
+local cachedSprites = {}
+local function getCachedSprite(gfx, i, w, h)
+  if not cachedSprites[i] then
+    local sx = i % 16
+    local sy = math.floor(i / 16)
+    local spr = getSpriteAt(gfx, sx, sy, w or 8, h or 8)
+    cachedSprites[i] = spr
+  end
+  return cachedSprites[i]
+end
+
 ---returns a sprite mapping per p8 file
 ---@param filename string
 local function parseFile(filename)
@@ -115,10 +135,8 @@ local function parseFile(filename)
     ---@param w number pixels wide (default 8)
     ---@param h number pixels tall (default 8)
     ---@return love.Image
-    makeSpriteAt = function(i, w, h)
-      local sx = i % 16
-      local sy = math.floor(i / 16)
-      return getSpriteAt(groups.__gfx__, sx, sy, w or 8, h or 8)
+    spriteAt = function(i, w, h)
+      return getCachedSprite(groups.__gfx__, i, w, h)
     end,
 
     ---Returns a 2d array of map sprite indexes

@@ -12,18 +12,6 @@ function love.load()
 
 end
 
-local cachedSprites = {}
----Creates or returns already created sprite
----@param i number sprite index
----@param w number pixels wide (default 8)
----@param h number pixels tall (default 8)
-local function cachedSpriteAt(i, w, h)
-  if not cachedSprites[i] then
-    cachedSprites[i] = basics.makeSpriteAt(i, w, h)
-  end
-  return cachedSprites[i]
-end
-
 function love.draw()
   love.graphics.clear()
 
@@ -37,18 +25,18 @@ function love.draw()
   for y = 1, 64 do
     for x = 1, 128 do
       local spri = map[y][x]
-      local spr = cachedSpriteAt(spri)
+      local spr = basics.spriteAt(spri)
       love.graphics.draw(spr, mapx + (x-1)*8, mapy + (y-1)*8)
     end
   end
 
-  love.graphics.draw(cachedSpriteAt(0),  10*3, 10, 0, 2, 2)
-  love.graphics.draw(cachedSpriteAt(1),  20*3, 10, 0, 2, 2)
-  love.graphics.draw(cachedSpriteAt(2),  30*3, 10, 0, 2, 2)
-  love.graphics.draw(cachedSpriteAt(3),  40*3, 10, 0, 2, 2)
-  love.graphics.draw(cachedSpriteAt(17), 50*3, 10, 0, 2, 2)
-  love.graphics.draw(cachedSpriteAt(18), 60*3, 10, 0, 2, 2)
-  love.graphics.draw(cachedSpriteAt(19), 70*3, 10, 0, 2, 2)
-  love.graphics.draw(cachedSpriteAt(37), 80*3, 10, 0, 2, 2)
-  love.graphics.draw(cachedSpriteAt(4, 16, 16), 90*3, 10, 0, 2, 2)
+  love.graphics.draw(basics.spriteAt(0),  10*3, 10, 0, 2, 2)
+  love.graphics.draw(basics.spriteAt(1),  20*3, 10, 0, 2, 2)
+  love.graphics.draw(basics.spriteAt(2),  30*3, 10, 0, 2, 2)
+  love.graphics.draw(basics.spriteAt(3),  40*3, 10, 0, 2, 2)
+  love.graphics.draw(basics.spriteAt(17), 50*3, 10, 0, 2, 2)
+  love.graphics.draw(basics.spriteAt(18), 60*3, 10, 0, 2, 2)
+  love.graphics.draw(basics.spriteAt(19), 70*3, 10, 0, 2, 2)
+  love.graphics.draw(basics.spriteAt(37), 80*3, 10, 0, 2, 2)
+  love.graphics.draw(basics.spriteAt(4, 16, 16), 90*3, 10, 0, 2, 2)
 end
