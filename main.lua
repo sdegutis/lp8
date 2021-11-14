@@ -33,13 +33,13 @@ function love.draw()
     end
   end
 
-  basics.spriteAt(0):draw(  10*3, 10)
-  basics.spriteAt(1):draw(  20*3, 10)
-  basics.spriteAt(2):draw(  30*3, 10)
-  basics.spriteAt(3):draw(  40*3, 10)
-  basics.spriteAt(17):draw( 50*3, 10)
-  basics.spriteAt(18):draw( 60*3, 10)
-  basics.spriteAt(19):draw( 70*3, 10)
-  basics.spriteAt(37):draw( 80*3, 10)
-  basics.spriteAt(4, 16, 16):draw( 90*3, 10)
+  basics.spriteAt(0):draw(  10*3, 10, 3)
+  basics.spriteAt(1):draw(  20*3, 10, 3)
+  basics.spriteAt(2):draw(  30*3, 10, 3)
+  basics.spriteAt(3):draw(  40*3, 10, 3)
+  basics.spriteAt(17):draw( 50*3, 10, 3)
+  basics.spriteAt(18):draw( 60*3, 10, 3)
+  basics.spriteAt(19):draw( 70*3, 10, 3)
+  basics.spriteAt(37):draw( 80*3, 10, 3)
+  basics.spriteAt(4, 16, 16):draw( 90*3, 10, 3)
 end

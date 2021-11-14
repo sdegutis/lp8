@@ -38,8 +38,9 @@ end
 
 ---@param x number
 ---@param y number
-function Sprite:draw(x, y)
-  love.graphics.draw(self.image, x, y)
+---@param scale number default 1
+function Sprite:draw(x, y, scale)
+  love.graphics.draw(self.image, x, y, 0, scale, scale)
 end
 
 ---@param spritesheet string[]
