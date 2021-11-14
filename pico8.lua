@@ -28,10 +28,20 @@ local colorTable = {
 
 ---@class Sprite
 ---@field image love.Image
+---@field flag number
+---@field flags boolean[]
 local Sprite = {}
 
-function Sprite.new(image)
-  local spr = {image=image}
+local function calcFlags(flag)
+  local t = {}
+  for i = 0, 7 do
+    table.insert(t, i, bit.band(flag, 2^i) > 0)
+  end
+  return t
+end
+
+function Sprite.new(image, flag)
+  local spr = {image=image, flag=flag, flags=calcFlags(flag)}
   setmetatable(spr, {__index = Sprite})
   return spr
 end
@@ -40,16 +50,19 @@ end
 ---@param y number
 ---@param scale number default 1
 function Sprite:draw(x, y, scale)
+  if self.flags[7] then scale = 15 end
+
   love.graphics.draw(self.image, x, y, 0, scale, scale)
 end
 
 ---@param spritesheet string[]
+---@param flag number
 ---@param sx number
 ---@param sy number
 ---@param w number
 ---@param h number
 ---@return Sprite
-local function getSpriteAt(spritesheet, sx, sy, w, h)
+local function getSpriteAt(spritesheet, flag, sx, sy, w, h)
   local data = love.image.newImageData(w,h)
 
   for py = 0, (h-1) do
@@ -66,7 +79,7 @@ local function getSpriteAt(spritesheet, sx, sy, w, h)
     end
   end
 
-  return Sprite.new(love.graphics.newImage(data))
+  return Sprite.new(love.graphics.newImage(data), flag)
 end
 
 ---@param filename string
@@ -122,12 +135,27 @@ local function getMap(map1, map2)
   return output
 end
 
+local function parseFlags(gff)
+  gff = table.concat(gff)
+  gff = gff .. string.rep('0', 512-#gff)
+
+  local flags = {}
+
+  for i = 1, #gff-1, 2 do
+    local hex = gff:sub(i, i+1)
+    local n = tonumber(hex, 16)
+    table.insert(flags, n)
+  end
+
+  return flags
+end
+
 local cachedSprites = {}
-local function getCachedSprite(gfx, i, w, h)
+local function getCachedSprite(gfx, flags, i, w, h)
   if not cachedSprites[i] then
     local sx = i % 16
     local sy = math.floor(i / 16)
-    local spr = getSpriteAt(gfx, sx, sy, w or 8, h or 8)
+    local spr = getSpriteAt(gfx, flags[i+1], sx, sy, w or 8, h or 8)
     cachedSprites[i] = spr
   end
   return cachedSprites[i]
@@ -145,6 +173,8 @@ local function parseFile(filename, fullMap)
     or {}
   local map = getMap(map1, map2)
 
+  local flags = parseFlags(groups.__gff__ or {})
+
   return {
 
     ---Returns a new love.Image for this sprite
@@ -153,7 +183,7 @@ local function parseFile(filename, fullMap)
     ---@param h number pixels tall (default 8)
     ---@return Sprite
     spriteAt = function(i, w, h)
-      return getCachedSprite(groups.__gfx__, i, w, h)
+      return getCachedSprite(groups.__gfx__, flags, i, w, h)
     end,
 
     ---2d array of map sprite indexes: map[y][x]
