@@ -25,8 +25,15 @@ local colorTable = {
   makecolor(0xFF,0xCC,0xAA),
 }
 
+---@class Sprite
+---@field image love.Image
 local Sprite = {}
-setmetatable(Sprite, {__index = Sprite})
+
+function Sprite.new(image)
+  local spr = {image=image}
+  setmetatable(spr, {__index = Sprite})
+  return spr
+end
 
 ---@param x number
 ---@param y number
@@ -39,7 +46,7 @@ end
 ---@param sy number
 ---@param w number
 ---@param h number
----@return love.Image
+---@return Sprite
 local function getSpriteAt(spritesheet, sx, sy, w, h)
   local data = love.image.newImageData(w,h)
 
@@ -57,7 +64,7 @@ local function getSpriteAt(spritesheet, sx, sy, w, h)
     end
   end
 
-  return love.graphics.newImage(data)
+  return Sprite.new(love.graphics.newImage(data))
 end
 
 ---@param filename string
@@ -142,7 +149,7 @@ local function parseFile(filename, fullMap)
     ---@param i number
     ---@param w number pixels wide (default 8)
     ---@param h number pixels tall (default 8)
-    ---@return love.Image
+    ---@return Sprite
     spriteAt = function(i, w, h)
       return getCachedSprite(groups.__gfx__, i, w, h)
     end,

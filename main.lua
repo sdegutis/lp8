@@ -29,17 +29,17 @@ function love.draw()
     for x = 1, 128 do
       local spri = basics.map[y][x]
       local spr = basics.spriteAt(spri)
-      love.graphics.draw(spr, mapx + (x-1)*8, mapy + (y-1)*8)
+      spr:draw(mapx + (x-1)*8, mapy + (y-1)*8)
     end
   end
 
-  love.graphics.draw(basics.spriteAt(0),  10*3, 10, 0, 2, 2)
-  love.graphics.draw(basics.spriteAt(1),  20*3, 10, 0, 2, 2)
-  love.graphics.draw(basics.spriteAt(2),  30*3, 10, 0, 2, 2)
-  love.graphics.draw(basics.spriteAt(3),  40*3, 10, 0, 2, 2)
-  love.graphics.draw(basics.spriteAt(17), 50*3, 10, 0, 2, 2)
-  love.graphics.draw(basics.spriteAt(18), 60*3, 10, 0, 2, 2)
-  love.graphics.draw(basics.spriteAt(19), 70*3, 10, 0, 2, 2)
-  love.graphics.draw(basics.spriteAt(37), 80*3, 10, 0, 2, 2)
-  love.graphics.draw(basics.spriteAt(4, 16, 16), 90*3, 10, 0, 2, 2)
+  basics.spriteAt(0):draw(  10*3, 10)
+  basics.spriteAt(1):draw(  20*3, 10)
+  basics.spriteAt(2):draw(  30*3, 10)
+  basics.spriteAt(3):draw(  40*3, 10)
+  basics.spriteAt(17):draw( 50*3, 10)
+  basics.spriteAt(18):draw( 60*3, 10)
+  basics.spriteAt(19):draw( 70*3, 10)
+  basics.spriteAt(37):draw( 80*3, 10)
+  basics.spriteAt(4, 16, 16):draw( 90*3, 10)
 end
