@@ -80,9 +80,23 @@ local function getMap(map1, map2)
   map2 = map2 .. string.rep('0', 8192-#map2)
 
   -- now we have a whole map we can loop through
+  ---@type string
   local map = map1 .. map2
 
-  
+  local output = {}
+  local i = 1
+  for y = 1, 64 do
+    local row = {}
+    for x = 1, 128 do
+      local hex = map:sub(i,i+1)
+      local n = tonumber(hex, 16)
+      table.insert(row, n)
+      i = i + 1
+    end
+    table.insert(output, row)
+  end
+
+  return output
 end
 
 ---returns a sprite mapping per p8 file
