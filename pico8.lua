@@ -125,9 +125,17 @@ local function getCachedSprite(gfx, i, w, h)
 end
 
 ---returns a sprite mapping per p8 file
----@param filename string
-local function parseFile(filename)
+---@param filename string relative path
+---@param fullMap boolean whether to use the bottom half also
+local function parseFile(filename, fullMap)
   local groups = parseGroups(filename)
+
+  local map1 = groups.__map__ or {}
+  local map2 = fullMap
+    and {unpack(groups.__gfx__, 65)}
+    or {}
+  local map = getMap(map1, map2)
+
   return {
 
     ---Returns a new love.Image for this sprite
@@ -139,15 +147,8 @@ local function parseFile(filename)
       return getCachedSprite(groups.__gfx__, i, w, h)
     end,
 
-    ---Returns a 2d array of map sprite indexes
-    ---@param full boolean whether to use the bottom half also
-    makeMap = function(full)
-      local map1 = groups.__map__ or {}
-      local map2 = full
-        and {unpack(groups.__gfx__, 65)}
-        or {}
-      return getMap(map1, map2)
-    end
+    ---2d array of map sprite indexes
+    map = map,
 
   }
 end

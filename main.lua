@@ -4,9 +4,7 @@ love.graphics.setDefaultFilter("nearest", "nearest")
 love.window.setMode(800, 600)
 
 local pico8 = require("pico8")
-local basics = pico8.parseFile("test2.p8")
-
-local map = basics.makeMap(true)
+local basics = pico8.parseFile("test2.p8", true)
 
 function love.load()
 
@@ -24,7 +22,7 @@ function love.draw()
 
   for y = 1, 64 do
     for x = 1, 128 do
-      local spri = map[y][x]
+      local spri = basics.map[y][x]
       local spr = basics.spriteAt(spri)
       love.graphics.draw(spr, mapx + (x-1)*8, mapy + (y-1)*8)
     end
