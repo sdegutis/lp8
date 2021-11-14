@@ -160,6 +160,8 @@ local function parseFile(filename, fullMap)
   local map2 = fullMap
     and {unpack(groups.__gfx__, 65)}
     or {}
+
+  ---2d array of map sprite indexes: `map[y][x]`
   local map = parseMap(map1, map2)
 
   local flags = parseFlags(groups.__gff__ or {})
@@ -177,7 +179,6 @@ local function parseFile(filename, fullMap)
       return createSpriteAt(groups.__gfx__, flags[i+1], sx, sy, w or 8, h or 8)
     end,
 
-    ---2d array of map sprite indexes: map[y][x]
     map = map,
 
   }
