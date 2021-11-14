@@ -147,7 +147,7 @@ local function parseFile(filename, fullMap)
       return getCachedSprite(groups.__gfx__, i, w, h)
     end,
 
-    ---2d array of map sprite indexes
+    ---2d array of map sprite indexes: map[y][x]
     map = map,
 
   }
