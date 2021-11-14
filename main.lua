@@ -1,7 +1,12 @@
 if pcall(require, "lldebugger") then require("lldebugger").start() end
 if pcall(require, "mobdebug") then require("mobdebug").start() end
+
+local winw, winh = love.window.getMode()
+if winw ~= 800 or winh ~= 600 then
+  love.window.setMode(800, 600)
+end
+
 love.graphics.setDefaultFilter("nearest", "nearest")
-love.window.setMode(800, 600)
 
 local pico8 = require("pico8")
 local basics = pico8.parseFile("test2.p8", true)
