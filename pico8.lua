@@ -71,6 +71,17 @@ end
 ---@param map1 string[] 0-32 rows of 256 chars
 ---@param map2 string[] 0-64 rows of 128 chars
 local function getMap(map1, map2)
+  -- make them both 0-8192 chars
+  map1 = table.concat(map1)
+  map2 = table.concat(map2)
+
+  -- pad end of each with 0s
+  map1 = map1 .. string.rep('0', 8192-#map1)
+  map2 = map2 .. string.rep('0', 8192-#map2)
+
+  -- now we have a whole map we can loop through
+  local map = map1 .. map2
+
   
 end
 
