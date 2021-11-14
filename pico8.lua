@@ -3,12 +3,11 @@
 ---@param g number
 ---@param b number
 local function makecolor(r,g,b,a)
-  a = a or 1
-  return { r/0xff, g/0xff, b/0xff, a }
+  return { r/0xff, g/0xff, b/0xff, a or 1 }
 end
 
 local colorTable = {
-  makecolor(0x00,0x00,0x00, 0),
+  makecolor(0x00,0x00,0x00,0),
   makecolor(0x1D,0x2B,0x53),
   makecolor(0x7E,0x25,0x53),
   makecolor(0x00,0x87,0x51),
@@ -56,13 +55,12 @@ function Sprite:draw(x, y, scale)
 end
 
 ---@param spritesheet string[]
----@param flag number
 ---@param sx number
 ---@param sy number
 ---@param w number
 ---@param h number
----@return Sprite
-local function createSpriteAt(spritesheet, flag, sx, sy, w, h)
+---@return love.Image
+local function newImageFromSpritesheet(spritesheet, sx, sy, w, h)
   local data = love.image.newImageData(w,h)
 
   for py = 0, (h-1) do
@@ -79,7 +77,7 @@ local function createSpriteAt(spritesheet, flag, sx, sy, w, h)
     end
   end
 
-  return Sprite.new(love.graphics.newImage(data), flag)
+  return love.graphics.newImage(data)
 end
 
 ---@param filename string
@@ -176,7 +174,8 @@ local function parseFile(filename, fullMap)
     makeSpriteAt = function(i, w, h)
       local sx = i % 16
       local sy = math.floor(i / 16)
-      return createSpriteAt(groups.__gfx__, flags[i+1], sx, sy, w or 8, h or 8)
+      local img = newImageFromSpritesheet(groups.__gfx__, sx, sy, w or 8, h or 8)
+      return Sprite.new(img, flags[i+1])
     end,
 
     map = map,
