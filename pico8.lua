@@ -68,8 +68,8 @@ end
 
 ---Returns a 2d array of sprite indexes.
 ---Each cell is 2 chars (hex).
----@param map1 string[] 32 rows of 256 chars
----@param map2 string[] nil, or 64 rows of 128 chars
+---@param map1 string[] 0-32 rows of 256 chars
+---@param map2 string[] 0-64 rows of 128 chars
 local function getMap(map1, map2)
   
 end
@@ -94,10 +94,11 @@ local function parseFile(filename)
     ---Returns a 2d array of map sprite indexes
     ---@param full boolean whether to use the bottom half also
     makeMap = function(full)
+      local map1 = groups.__map__ or {}
       local map2 = full
         and {unpack(groups.__gfx__, 65)}
-        or nil
-      return getMap(groups.__map__, map2)
+        or {}
+      return getMap(map1, map2)
     end
 
   }
