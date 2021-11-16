@@ -162,22 +162,31 @@ local function parseFile(filename, fullMap)
 
   local flags = parseFlags(groups.__gff__ or {})
 
+  ---Returns a new love.Image for this sprite
+  ---@param i number
+  ---@param w number pixels wide (default 8)
+  ---@param h number pixels tall (default 8)
+  ---@return Sprite
+  local function makeSpriteAt(i, w, h)
+    local sx = i % 16
+    local sy = math.floor(i / 16)
+    local img = newImageFromSpritesheet(groups.__gfx__, sx, sy, w or 8, h or 8)
+    return Sprite.new(img, flags[i+1])
+  end
+
+  local cachedSprites = {}
+  local function getOrMakeSpriteAt(i, w, h)
+    if not cachedSprites[i] then
+      cachedSprites[i] = makeSpriteAt(i, w, h)
+    end
+    return cachedSprites[i]
+  end
+
   return {
-
-    ---Returns a new love.Image for this sprite
-    ---@param i number
-    ---@param w number pixels wide (default 8)
-    ---@param h number pixels tall (default 8)
-    ---@return Sprite
-    makeSpriteAt = function(i, w, h)
-      local sx = i % 16
-      local sy = math.floor(i / 16)
-      local img = newImageFromSpritesheet(groups.__gfx__, sx, sy, w or 8, h or 8)
-      return Sprite.new(img, flags[i+1])
-    end,
-
+    makeSpriteAt = makeSpriteAt,
+    cachedSprites = cachedSprites,
+    getOrMakeSpriteAt = getOrMakeSpriteAt,
     map = map,
-
   }
 end
 
