@@ -94,10 +94,16 @@ end
 
 ---Returns a 2d array of sprite indexes.
 ---Each cell is 2 chars (hex).
----@param map1 string[] 0-32 rows of 256 chars
----@param map2 string[] 0-64 rows of 128 chars
+---@param groups {__map__: string[], __gfx__: string[]}
+---@param fullMap boolean
 ---@return number[][]
-local function parseMap(map1, map2)
+local function parseMap(groups, fullMap)
+  ---0-32 rows of 256 chars
+  local map1 = groups.__map__ or {}
+
+  ---0-64 rows of 128 chars
+  local map2 = fullMap and {unpack(groups.__gfx__, 65)} or {}
+
   -- make them both 0-8192 chars
   map1 = table.concat(map1)
   map2 = table.concat(map2)
@@ -153,13 +159,8 @@ end
 local function parseFile(filename, fullMap)
   local groups = parseGroups(filename)
 
-  local map1 = groups.__map__ or {}
-  local map2 = fullMap
-    and {unpack(groups.__gfx__, 65)}
-    or {}
-
   ---2d array of map sprite indexes: `map[y][x]`
-  local map = parseMap(map1, map2)
+  local map = parseMap(groups, fullMap)
 
   local flags = parseFlags(groups.__gff__ or {})
 
