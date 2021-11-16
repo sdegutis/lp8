@@ -93,15 +93,14 @@ local function parseGroups(filename)
 end
 
 ---Returns a 2d array of sprite indexes.
----Each cell is 2 chars (hex).
 ---@param groups {__map__: string[], __gfx__: string[]}
 ---@param fullMap boolean
 ---@return number[][]
 local function parseMap(groups, fullMap)
-  ---0-32 rows of 256 chars
+  -- 0-32 rows of 256 chars
   local map1 = groups.__map__ or {}
 
-  ---0-64 rows of 128 chars
+  -- 0-64 rows of 128 chars
   local map2 = fullMap and {unpack(groups.__gfx__, 65)} or {}
 
   -- make them both 0-8192 chars
@@ -159,13 +158,14 @@ end
 local function parseFile(filename, fullMap)
   local groups = parseGroups(filename)
 
-  ---2d array of map sprite indexes: `map[y][x]`
+  ---2d array of map sprite indexes: `map[y][x]` (0-indexed like PICO-8)
   local map = parseMap(groups, fullMap)
 
+  ---Array of flags: `flags[i]` (0-indexed like PICO-8)
   local flags = parseFlags(groups.__gff__ or {})
 
   ---Returns a new love.Image for this sprite
-  ---@param i number
+  ---@param i number (0-indexed like PICO-8)
   ---@param w number pixels wide (default 8)
   ---@param h number pixels tall (default 8)
   ---@return Sprite
@@ -177,6 +177,12 @@ local function parseFile(filename, fullMap)
   end
 
   local cachedSprites = {}
+
+  ---Returns a cached (or new) love.Image for this sprite
+  ---@param i number (0-indexed like PICO-8)
+  ---@param w number pixels wide (default 8)
+  ---@param h number pixels tall (default 8)
+  ---@return Sprite
   local function getOrMakeSpriteAt(i, w, h)
     if not cachedSprites[i] then
       cachedSprites[i] = makeSpriteAt(i, w, h)
