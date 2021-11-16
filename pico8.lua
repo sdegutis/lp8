@@ -137,10 +137,11 @@ local function parseFlags(gff)
 
   local flags = {}
 
-  for i = 1, #gff-1, 2 do
-    local hex = gff:sub(i, i+1)
+  for i = 0, 255 do
+    local j = i*2 + 1
+    local hex = gff:sub(j, j+1)
     local n = tonumber(hex, 16)
-    table.insert(flags, n)
+    table.insert(flags, i, n)
   end
 
   return flags
@@ -171,7 +172,7 @@ local function parseFile(filename, fullMap)
     local sx = i % 16
     local sy = math.floor(i / 16)
     local img = newImageFromSpritesheet(groups.__gfx__, sx, sy, w or 8, h or 8)
-    return Sprite.new(img, flags[i+1])
+    return Sprite.new(img, flags[i])
   end
 
   local cachedSprites = {}
@@ -184,9 +185,9 @@ local function parseFile(filename, fullMap)
 
   return {
     makeSpriteAt = makeSpriteAt,
-    cachedSprites = cachedSprites,
     getOrMakeSpriteAt = getOrMakeSpriteAt,
     map = map,
+    flags = flags,
   }
 end
 
