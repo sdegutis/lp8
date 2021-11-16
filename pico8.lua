@@ -1,4 +1,3 @@
-
 ---@param r number
 ---@param g number
 ---@param b number
@@ -49,8 +48,6 @@ end
 ---@param y number
 ---@param scale number default 1
 function Sprite:draw(x, y, scale)
-  if self.flags[7] then scale = 15 end
-
   love.graphics.draw(self.image, x, y, 0, scale, scale)
 end
 
