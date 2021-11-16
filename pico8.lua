@@ -92,6 +92,20 @@ local function parseGroups(filename)
   return groups
 end
 
+---@param t table
+---@param v any
+local function tableZeroBasedinsert(t, v)
+  -- list           len   pos
+  -- []             #0    0
+  -- [0=a]          #0    1
+  -- [0=a,1=b]      #1    2
+  -- [0=a,1=b,2=c]  #2    3
+  -- oh Lua...
+
+  local pos = (t[0] == nil) and 0 or #t+1
+  table.insert(t, pos, v)
+end
+
 ---Returns a 2d array of sprite indexes.
 ---@param groups {__map__: string[], __gfx__: string[]}
 ---@param fullMap boolean
@@ -126,11 +140,11 @@ local function parseMap(groups, fullMap)
       if y > 32 then hex = hex:reverse() end
 
       local n = tonumber(hex, 16)
-      table.insert(row, n)
+      tableZeroBasedinsert(row, n)
 
       i = i + 2
     end
-    table.insert(output, row)
+    tableZeroBasedinsert(output, row)
   end
 
   return output

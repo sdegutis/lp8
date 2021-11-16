@@ -26,11 +26,11 @@ function love.draw()
   love.graphics.setColor(1,1,1)
   love.graphics.rectangle('line', mapx-1, mapy-1, 128*8+1, 64*8+1)
 
-  for y = 1, 64 do
-    for x = 1, 128 do
+  for y = 0, 63 do
+    for x = 0, 127 do
       local spri = basics.map[y][x]
       local spr = basics.getOrMakeSpriteAt(spri)
-      spr:draw(mapx + (x-1)*8, mapy + (y-1)*8)
+      spr:draw(mapx + x*8, mapy + y*8)
     end
   end
 
