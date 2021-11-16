@@ -99,6 +99,7 @@ end
 ---Each cell is 2 chars (hex).
 ---@param map1 string[] 0-32 rows of 256 chars
 ---@param map2 string[] 0-64 rows of 128 chars
+---@return number[][]
 local function parseMap(map1, map2)
   -- make them both 0-8192 chars
   map1 = table.concat(map1)
