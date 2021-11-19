@@ -108,14 +108,13 @@ end
 
 ---Returns a 2d array of sprite indexes.
 ---@param groups {__map__: string[], __gfx__: string[]}
----@param fullMap boolean
 ---@return number[][]
-local function parseMap(groups, fullMap)
+local function parseMap(groups)
   -- 0-32 rows of 256 chars
   local map1 = groups.__map__ or {}
 
   -- 0-64 rows of 128 chars
-  local map2 = fullMap and {unpack(groups.__gfx__, 65)} or {}
+  local map2 = {unpack(groups.__gfx__ or {}, 65)} or {}
 
   -- make them both 0-8192 chars
   map1 = table.concat(map1)
@@ -168,12 +167,11 @@ end
 
 ---returns a sprite mapping per p8 file
 ---@param filename string relative path
----@param fullMap boolean whether to use the bottom half also
-local function parseFile(filename, fullMap)
+local function parseFile(filename)
   local groups = parseGroups(filename)
 
   ---2d array of map sprite indexes: `map[y][x]` (0-indexed like PICO-8)
-  local map = parseMap(groups, fullMap)
+  local map = parseMap(groups)
 
   ---Array of flags: `flags[i]` (0-indexed like PICO-8)
   local flags = parseFlags(groups.__gff__ or {})
@@ -186,7 +184,7 @@ local function parseFile(filename, fullMap)
   local function makeSpriteAt(i, w, h)
     local sx = i % 16
     local sy = math.floor(i / 16)
-    local img = newImageFromSpritesheet(groups.__gfx__, sx, sy, w or 8, h or 8)
+    local img = newImageFromSpritesheet(groups.__gfx__ or {}, sx, sy, w or 8, h or 8)
     return Sprite.new(img, flags[i])
   end
 

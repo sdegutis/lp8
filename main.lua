@@ -9,7 +9,7 @@ end
 love.graphics.setDefaultFilter("nearest", "nearest")
 
 local pico8 = require("pico8")
-local basics = pico8.parseFile("test2.p8", true)
+local basics = pico8.parseFile("test2.p8")
 
 function love.load()
 
