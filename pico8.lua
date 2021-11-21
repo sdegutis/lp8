@@ -6,6 +6,7 @@ local function makecolor(r,g,b,a)
 end
 
 local colorTable = {
+  [0]=
   makecolor(0x00,0x00,0x00,0),
   makecolor(0x1D,0x2B,0x53),
   makecolor(0x7E,0x25,0x53),
@@ -52,12 +53,28 @@ function Sprite:draw(x, y, scale)
 end
 
 --- @param gfx string[] 0-128 lines of 128 char strings
+--- @return number[][] spritesheet `colorIndexes[y=0-127][x=0-127]`
 local function parseSpritesheet(gfx)
-  do return gfx end
-  local len = 128
+  local ss = {}
+
+  for y = 0, 127 do
+    local row = {}
+    table.insert(ss, y, row)
+
+    local chars = gfx[y+1] or string.rep('0', 128)
+
+    for x = 0, 127 do
+      local idx = x + 1
+      local hex = chars:sub(idx,idx)
+      local colorIndex = tonumber(hex, 16)
+      table.insert(row, x, colorIndex)
+    end
+  end
+
+  return ss
 end
 
----@param spritesheet string[]
+---@param spritesheet number[][]
 ---@param sx number
 ---@param sy number
 ---@param w number
@@ -67,16 +84,13 @@ local function newImageFromSpritesheet(spritesheet, sx, sy, w, h)
   local data = love.image.newImageData(w,h)
 
   for py = 0, (h-1) do
-    local row = sy * 8 + py + 1
-    local line = spritesheet[row] or string.rep('0', 128)
+    local rowIndex = sy * 8 + py
+    local row = spritesheet[rowIndex]
 
     for px = 0, (w-1) do
-      local idx = sx * 8 + px + 1
-      local hex = line:sub(idx,idx)
-      local n = tonumber(hex, 16)
-      local color = colorTable[n+1]
-
-      data:setPixel(px, py, color)
+      local idx = sx * 8 + px
+      local colorIndex = row[idx]
+      data:setPixel(px, py, colorTable[colorIndex])
     end
   end
 
@@ -194,7 +208,7 @@ return function(filenameOrContents)
   local function makeSpriteAt(i, w, h)
     local sx = i % 16
     local sy = math.floor(i / 16)
-    local img = newImageFromSpritesheet(groups.__gfx__ or {}, sx, sy, w or 8, h or 8)
+    local img = newImageFromSpritesheet(spritesheet, sx, sy, w or 8, h or 8)
     return Sprite.new(img, flags[i])
   end
 
