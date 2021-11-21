@@ -75,6 +75,31 @@ local function parseSpritesheet(gfx)
 end
 
 ---@param spritesheet number[][]
+---@param chars string
+local function newFontFromSpritesheet(spritesheet, chars)
+  local imgdata = love.image.newImageData(8*16*8, 8)
+
+  -- Loop through spritesheet
+  for cy=0,7 do
+    for cx=0,15 do
+
+      -- Loop through sprite
+      for y=0,7 do
+        local row = spritesheet[cy*8+y]
+        for x=0,7 do
+          local colorIndex = row[cx*8+x]
+          local px = cx*8+x + cy*128
+          imgdata:setPixel(px, y, colorTable[colorIndex])
+        end
+      end
+
+    end
+  end
+
+  return love.graphics.newImageFont(imgdata, chars)
+end
+
+---@param spritesheet number[][]
 ---@param sx number
 ---@param sy number
 ---@param w number
@@ -227,7 +252,7 @@ return function(filenameOrContents)
   end
 
   local function createFont(chars)
-    return spritesheet
+    return newFontFromSpritesheet(spritesheet, chars)
   end
 
   return {
@@ -235,5 +260,6 @@ return function(filenameOrContents)
     getOrMakeSpriteAt = getOrMakeSpriteAt,
     map = map,
     flags = flags,
+    createFont = createFont,
   }
 end

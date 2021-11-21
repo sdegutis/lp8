@@ -10,9 +10,9 @@ love.graphics.setDefaultFilter("nearest", "nearest")
 
 local loadP8 = require("pico8")
 local basics = loadP8("test2.p8")
--- local font1 = pico8.createFont("font1.p8", "abcdefghijklmnopqrstuvwxyz .,'!?1234567890-+/()\":;%*=[]<>_")
 
--- love.graphics.setFont(font1)
+local font1 = loadP8("font1.p8").createFont("abcdefghijklmnopqrstuvwxyz .,'!?1234567890-+/()\":;%*=[]<>_")
+love.graphics.setFont(font1)
 
 function love.draw()
   love.graphics.clear()
