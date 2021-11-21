@@ -77,11 +77,11 @@ local function newImageFromSpritesheet(spritesheet, sx, sy, w, h)
   return love.graphics.newImage(data)
 end
 
----@param filename string
-local function parseGroups(filename)
+---@param lines any
+local function parseGroups(lines)
   local groups = {}
   local groupname = '__intro__'
-  for line in love.filesystem.lines(filename) do
+  for line in lines do
     if line:sub(1,2) == '__' then
       groupname = line
     else
@@ -165,10 +165,9 @@ local function parseFlags(gff)
   return flags
 end
 
----returns a sprite mapping per p8 file
----@param filename string relative path
-local function parseFile(filename)
-  local groups = parseGroups(filename)
+---@param lines any
+local function parseLines(lines)
+  local groups = parseGroups(lines)
 
   ---2d array of map sprite indexes: `map[y][x]` (0-indexed like PICO-8)
   local map = parseMap(groups)
@@ -210,6 +209,24 @@ local function parseFile(filename)
   }
 end
 
+---@param str string
+local function lines(str)
+  return str:gmatch("(.-)\n")
+end
+
+---Returns p8 data
+---@param contents string contents of p8 file
+local function parseString(contents)
+  return parseLines(lines(contents))
+end
+
+---Returns p8 data
+---@param filename string relative path
+local function parseFile(filename)
+  return parseLines(love.filesystem.lines(filename))
+end
+
 return {
   parseFile=parseFile,
+  parseString=parseString,
 }
