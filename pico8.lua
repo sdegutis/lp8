@@ -1,3 +1,6 @@
+-- Version 1.0
+
+
 ---@param r number
 ---@param g number
 ---@param b number
