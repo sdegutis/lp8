@@ -10,6 +10,9 @@ love.graphics.setDefaultFilter("nearest", "nearest")
 
 local pico8 = require("pico8")
 local basics = pico8.parseFile("test2.p8")
+local font1 = pico8.createFont("font1.p8", "abcdefghijklmnopqrstuvwxyz .,'!?1234567890-+/()\":;%*=[]")
+
+love.graphics.setFont(font1)
 
 function love.draw()
   love.graphics.clear()
@@ -38,4 +41,6 @@ function love.draw()
   basics.getOrMakeSpriteAt(19):draw( 70*3, 10, 3)
   basics.getOrMakeSpriteAt(37):draw( 80*3, 10, 3)
   basics.getOrMakeSpriteAt(4, 16, 16):draw( 90*3, 10, 3)
+
+  love.graphics.print("hello world!", 25, 205)
 end

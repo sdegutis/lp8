@@ -226,7 +226,13 @@ local function parseFile(filename)
   return parseLines(love.filesystem.lines(filename))
 end
 
+local function createFont(filename, chars)
+  local groups = parseGroups(love.filesystem.lines(filename))
+  return groups
+end
+
 return {
   parseFile=parseFile,
   parseString=parseString,
+  createFont=createFont,
 }
