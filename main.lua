@@ -42,5 +42,5 @@ function love.draw()
   basics.getOrMakeSpriteAt(37):draw( 80*3, 10, 3)
   basics.getOrMakeSpriteAt(4, 16, 16):draw( 90*3, 10, 3)
 
-  love.graphics.print("hello world!", 25, 205)
+  love.graphics.print("Hello World!", 25, 205, 0, 5, 5)
 end

@@ -77,22 +77,39 @@ end
 ---@param spritesheet number[][]
 ---@param chars string
 local function newFontFromSpritesheet(spritesheet, chars)
-  local imgdata = love.image.newImageData(8*16*8, 8)
+  local needsUpper = not chars:match("%u")
+
+  local howManyExtra = 0
+  if needsUpper then
+    chars = chars:gsub("%l", function(s)
+      howManyExtra = howManyExtra + 1
+      return s .. s:upper()
+    end)
+  end
+
+  local imgdata = love.image.newImageData((8*16+howManyExtra)*8, 8)
+
+  local i = 0
+  local function addGlyph(cx, cy)
+    -- Loop through sprite
+    for y=0,7 do
+      local row = spritesheet[cy*8+y]
+      for x=0,7 do
+        local colorIndex = row[cx*8+x]
+        imgdata:setPixel(i*8+x, y, colorTable[colorIndex])
+      end
+    end
+    i=i+1
+  end
 
   -- Loop through spritesheet
   for cy=0,7 do
     for cx=0,15 do
+      addGlyph(cx, cy)
 
-      -- Loop through sprite
-      for y=0,7 do
-        local row = spritesheet[cy*8+y]
-        for x=0,7 do
-          local colorIndex = row[cx*8+x]
-          local px = cx*8+x + cy*128
-          imgdata:setPixel(px, y, colorTable[colorIndex])
-        end
+      if needsUpper and chars:sub(i,i):match("%l") then
+        addGlyph(cx, cy)
       end
-
     end
   end
 
