@@ -51,6 +51,14 @@ function Sprite:draw(x, y, scale)
   love.graphics.draw(self.image, x, y, 0, scale, scale)
 end
 
+--- @param gfx string[] 0-128 lines of 128 char strings
+local function parseSpritesheet(gfx)
+  gfx = gfx or {}
+
+  local len = 128 * 64
+  
+end
+
 ---@param spritesheet string[]
 ---@param sx number
 ---@param sy number
@@ -228,7 +236,8 @@ end
 
 local function createFont(filename, chars)
   local groups = parseGroups(love.filesystem.lines(filename))
-  return groups
+  local spritesheet = parseSpritesheet(groups.__gfx__)
+  return spritesheet
 end
 
 return {
