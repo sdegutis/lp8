@@ -271,8 +271,11 @@ return function(filenameOrContents)
     return cachedSprites[i]
   end
 
+  ---Returns new font
+  ---@param chars string[] | nil omit this to use chars in Lua code
+  ---@return love.Font
   local function createFont(chars)
-    return newFontFromSpritesheet(spritesheet, chars)
+    return newFontFromSpritesheet(spritesheet, chars or table.concat(groups.__lua__))
   end
 
   return {
