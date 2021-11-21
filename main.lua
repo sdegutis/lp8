@@ -8,11 +8,11 @@ end
 
 love.graphics.setDefaultFilter("nearest", "nearest")
 
-local pico8 = require("pico8")
-local basics = pico8.parseFile("test2.p8")
-local font1 = pico8.createFont("font1.p8", "abcdefghijklmnopqrstuvwxyz .,'!?1234567890-+/()\":;%*=[]<>")
+local loadP8 = require("pico8")
+local basics = loadP8("test2.p8")
+-- local font1 = pico8.createFont("font1.p8", "abcdefghijklmnopqrstuvwxyz .,'!?1234567890-+/()\":;%*=[]<>_")
 
-love.graphics.setFont(font1)
+-- love.graphics.setFont(font1)
 
 function love.draw()
   love.graphics.clear()

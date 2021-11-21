@@ -53,10 +53,8 @@ end
 
 --- @param gfx string[] 0-128 lines of 128 char strings
 local function parseSpritesheet(gfx)
-  gfx = gfx or {}
-
-  local len = 128 * 64
-  
+  do return gfx end
+  local len = 128
 end
 
 ---@param spritesheet string[]
@@ -173,8 +171,11 @@ local function parseFlags(gff)
   return flags
 end
 
----@param lines any
-local function parseLines(lines)
+---@param filenameOrContents string
+return function(filenameOrContents)
+  local lines = filenameOrContents:match('^pico-8 cartridge')
+                  and filenameOrContents:gmatch("(.-)\n")
+                  or  love.filesystem.lines(filenameOrContents)
   local groups = parseGroups(lines)
 
   ---2d array of map sprite indexes: `map[y][x]` (0-indexed like PICO-8)
@@ -182,6 +183,8 @@ local function parseLines(lines)
 
   ---Array of flags: `flags[i]` (0-indexed like PICO-8)
   local flags = parseFlags(groups.__gff__ or {})
+
+  local spritesheet = parseSpritesheet(groups.__gfx__ or {})
 
   ---Returns a new love.Image for this sprite
   ---@param i number (0-indexed like PICO-8)
@@ -209,6 +212,10 @@ local function parseLines(lines)
     return cachedSprites[i]
   end
 
+  local function createFont(chars)
+    return spritesheet
+  end
+
   return {
     makeSpriteAt = makeSpriteAt,
     getOrMakeSpriteAt = getOrMakeSpriteAt,
@@ -216,32 +223,3 @@ local function parseLines(lines)
     flags = flags,
   }
 end
-
----@param str string
-local function lines(str)
-  return str:gmatch("(.-)\n")
-end
-
----Returns p8 data
----@param contents string contents of p8 file
-local function parseString(contents)
-  return parseLines(lines(contents))
-end
-
----Returns p8 data
----@param filename string relative path
-local function parseFile(filename)
-  return parseLines(love.filesystem.lines(filename))
-end
-
-local function createFont(filename, chars)
-  local groups = parseGroups(love.filesystem.lines(filename))
-  local spritesheet = parseSpritesheet(groups.__gfx__)
-  return spritesheet
-end
-
-return {
-  parseFile=parseFile,
-  parseString=parseString,
-  createFont=createFont,
-}
